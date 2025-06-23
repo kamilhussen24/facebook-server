@@ -1,4 +1,3 @@
-// /api/facebook.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -10,10 +9,10 @@ export default async function handler(req, res) {
   const body = {
     data: [
       {
-        event_name: event_name,
+        event_name,
         event_time: Math.floor(Date.now() / 1000),
         action_source: 'website',
-        event_source_url: event_source_url,
+        event_source_url,
         user_data: {
           client_user_agent: req.headers['user-agent'],
           ip_address: req.headers['x-forwarded-for'] || req.socket.remoteAddress
@@ -22,12 +21,12 @@ export default async function handler(req, res) {
     ]
   };
 
-  const fbResponse = await fetch(`https://graph.facebook.com/v19.0/${pixel_id}/events?access_token=${access_token}`, {
+  const fbRes = await fetch(`https://graph.facebook.com/v19.0/${pixel_id}/events?access_token=${access_token}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
 
-  const fbData = await fbResponse.json();
+  const fbData = await fbRes.json();
   res.status(200).json(fbData);
 }
