@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*'); // CORS allow for POST too
 
   const pixel_id = '1395230681787715';
-  const access_token = 'EAAH9xRN3Y1YBOxpZBePLxCdr7Y5w2T1rV4RoMgIV9vWQujHp4EXQvozZCARAEFESKEKwRFkrh8ANBVX1cziDCMU0lRzla79LUnbGZBRA5aZBoe4CR42rm0qV9yFISZA4sIWToZBLhGZAGEsKhGFr4obKlRg48xZB20vPEZCNIBhgvwZBFMDkdsG11z9Ao9eOgU2RxZCf4ob86bGbX4tYLZCCUxT8QlPnL4K5eXZBwQQZDZD'; // truncated for safety
+  const access_token = 'EAAH9xRN3Y1YBOyjLZCBh3HtCvIzZA5GRZBUIS1GIZBVFVpZBZBaSNLd6mG2JjxcL5EqbBfnUTztaljJQ2QKBS1z4tn7Q1lukBxoQIknVFVlr2ZAXO0ZCdjUwb0ZA6wIoYU6G01wLzdqnhZAFj2Kf0USgGVhZCCJMgaKyQ8wXktSzJZBEazgf41JcBuNKAap8ky8uCCkWrBVbVtudyqiij6TLmdFr9IzPcnOyHA4L'; // truncated for safety
 
   const { event_name, event_source_url } = req.body;
 
