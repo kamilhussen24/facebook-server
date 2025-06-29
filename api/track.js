@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,14 +13,17 @@ module.exports = async function handler(req, res) {
   const pixel_id = '1211731600730925';
   const access_token = 'EAARvr019SPQBO2Qe2JtkRZBe8SXEsHf0lsKexJhMsxYZBXK0kefGE2wyuyUhAOTqqGSprpt2y4v1aMzB1ZAiOqcZBnSwYcoktNbgy6lYI7hGw4ZAqe2ZByPRwr21McxLskrFBOYSZAZCfZBdTirWHPkjjeEbO8BHrMWsTgZAgTdJGGTVgIrcQfKuoVf38xNdkQXwZDZD';
 
-  // ক্লায়েন্ট থেকে প্রাপ্ত ডাটা
-  const { event_name, event_source_url, value, currency, event_id } = req.body;
+  const {
+    event_name,
+    event_source_url,
+    value,
+    currency,
+    event_id,
+    user_data = {}
+  } = req.body;
 
-  function hashSHA256(value) {
-    return crypto.createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
-  }
-
-  const userEmail = 'kamil.chat24@icloud.com'; // এটা ডায়নামিক করলে ভালো হয়
+  const clientIp =
+    req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
 
   const body = {
     data: [
@@ -31,12 +32,16 @@ module.exports = async function handler(req, res) {
         event_time: Math.floor(Date.now() / 1000),
         action_source: 'website',
         event_source_url,
-        event_id,  // Deduplication এর জন্য অনেক গুরুত্বপূর্ণ
+        event_id,
         user_data: {
-          em: hashSHA256(userEmail),
+          client_ip_address: clientIp,
           client_user_agent: req.headers['user-agent'],
+          ...(user_data.fbp ? { fbp: user_data.fbp } : {}),
+          ...(user_data.fbc ? { fbc: user_data.fbc } : {})
         },
-        ...(value && currency ? { custom_data: { value, currency } } : {}),
+        ...(value && currency
+          ? { custom_data: { value, currency } }
+          : {}),
       },
     ],
   };
