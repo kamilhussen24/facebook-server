@@ -30,7 +30,6 @@ module.exports = async function handler(req, res) {
         event_time: Math.floor(Date.now() / 1000),
         action_source: 'website',
         event_source_url,
-        test_event_code: 'TEST12048',
         user_data: {
           em: hashSHA256(userEmail),
           client_user_agent: req.headers['user-agent'],
