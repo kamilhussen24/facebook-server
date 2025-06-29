@@ -26,9 +26,7 @@ export default async function handler(req, res) {
         action_source: 'website',
         event_source_url,
         user_data: {
-          client_user_agent: req.headers['user-agent'],
-          ip_address: ip,
-        },
+          client_user_agent: req.headers['user-agent']
       },
     ],
   };
