@@ -15,9 +15,6 @@ export default async function handler(req, res) {
 
   const { event_name, event_source_url } = req.body;
 
-  const ip =
-    req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress;
-
   const body = {
     data: [
       {
@@ -27,6 +24,7 @@ export default async function handler(req, res) {
         event_source_url,
         user_data: {
           client_user_agent: req.headers['user-agent'],
+        },
       },
     ],
   };
