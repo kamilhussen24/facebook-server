@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -11,9 +13,15 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   const pixel_id = '1211731600730925';
-  const access_token = 'EAARvr019SPQBO2Qe2JtkRZBe8SXEsHf0lsKexJhMsxYZBXK0kefGE2wyuyUhAOTqqGSprpt2y4v1aMzB1ZAiOqcZBnSwYcoktNbgy6lYI7hGw4ZAqe2ZByPRwr21McxLskrFBOYSZAZCfZBdTirWHPkjjeEbO8BHrMWsTgZAgTdJGGTVgIrcQfKuoVf38xNdkQXwZDZD';
+  const access_token = 'EAARvr019SPQBO2Qe2JtkRZBe8SXEsHf0lsKexJhMsxYZBXK0kefGE2wyuyUhAOTqqGSprpt2y4v1aMzB1ZAiOqcZBnSwYcoktNbgy6lYI7hGw4ZAqe2ZByPRwr21McxLskrFBOYSZAZCfZBdTirWHPkjjeEbO8BHrMWsTgZAgTdJGGTVgIrcQfKuoVf38xNdkQXwZDZD'; // shorten for security
 
   const { event_name, event_source_url } = req.body;
+
+  function hashSHA256(value) {
+    return crypto.createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
+  }
+
+  const userEmail = 'kamil.chat24@icloud.com'; // Example email
 
   const body = {
     data: [
@@ -23,6 +31,7 @@ export default async function handler(req, res) {
         action_source: 'website',
         event_source_url,
         user_data: {
+          em: hashSHA256(userEmail),
           client_user_agent: req.headers['user-agent'],
         },
       },
