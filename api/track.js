@@ -45,7 +45,9 @@ module.exports = async function handler(req, res) {
       },
     ],
   };
-
+  
+  console.log('✅ Sent to Facebook:', JSON.stringify(body, null, 2));
+  
   try {
     const fbRes = await fetch(
       `https://graph.facebook.com/v19.0/${pixel_id}/events?access_token=${access_token}`,
