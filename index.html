@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FB CAPI + Pixel | Kamil Hussen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      text-align: center;
+      background: #f4f4f4;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+    button {
+      background-color: #4267B2;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #365899;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Facebook Pixel Event Tester</h1>
+
+  <button onclick="handleClick('Done', 'https://example.com/your-target-page')">Done</button>
+  <button onclick="sendEvent('Lead', null, null, generateEventId('Lead'))">Lead</button>
+  <button onclick="sendEvent('AddToCart', 19.99, 'USD', generateEventId('AddToCart'))">Add to Cart</button>
+  <button onclick="sendEvent('Purchase', 49.99, 'USD', generateEventId('Purchase'))">Purchase</button>
+  <button onclick="sendEvent('Subscribe', null, null, generateEventId('Subscribe'))">Subscribe</button>
+  <button onclick="sendEvent('ViewContent', null, null, generateEventId('ViewContent'))">View Content</button>
+  <button onclick="sendEvent('CompleteRegistration', null, null, generateEventId('CompleteRegistration'))">Complete Registration</button>
+  <button onclick="sendEvent('Join', null, null, generateEventId('Join'))">Join</button>
+  <button onclick="sendEvent('Call', null, null, generateEventId('Call'))">Call</button>
+  <button onclick="sendEvent('Read', null, null, generateEventId('Read'))">Read</button>
+
+  <script>
+    const apiUrl = 'https://facebook-server-kamil.vercel.app/api/track';
+
+    function generateEventId(name) {
+      return `${name}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+    }
+
+    function getCookieValue(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? match[2] : null;
+    }
+
+    async function sendEvent(name, value = null, currency = null, event_id = null) {
+      const fbp = getCookieValue('_fbp');
+      const fbc = getCookieValue('_fbc');
+      const userAgent = navigator.userAgent;
+
+      const payload = {
+        event_name: name,
+        event_source_url: window.location.href,
+        event_id,
+        value,
+        currency,
+        user_data: {
+          fbp,
+          fbc,
+          client_user_agent: userAgent
+        }
+      };
+
+      // Client-side Pixel
+      if (window.fbq) {
+        fbq('track', name, {
+          eventID: event_id,
+          ...(value !== null ? { value, currency } : {})
+        });
+      }
+
+      // Server-side API
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+    }
+
+    function handleClick(name, url) {
+      sendEvent(name, null, null, generateEventId(name));
+      setTimeout(() => window.open(url, '_blank'), 300);
+    }
+  </script>
+  <!-- Conversions API PageView Trigger -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const fbp = getCookieValue('_fbp');
+    const fbc = getCookieValue('_fbc');
+    const userAgent = navigator.userAgent;
+
+    const payload = {
+      event_name: 'PageView',
+      event_source_url: window.location.href,
+      event_id: generateEventId('PageView'),
+      user_data: {
+        fbp,
+        fbc,
+        client_user_agent: userAgent
+      }
+    };
+
+    fetch('https://facebook-server-kamil.vercel.app/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+  });
+</script>
+  <!-- Facebook Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod ?
+    n.callMethod.apply(n,arguments) : n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '1211731600730925');
+    fbq('track', 'PageView');
+  </script>
+
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1211731600730925&ev=PageView&noscript=1"/>
+  </noscript>
+</body>
+</html>
