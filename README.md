@@ -1,1 +1,1 @@
-This is a single server for tracking server size, without Google Tag Manager.
+This is a single server for tracking Facebook conversation API, without Google Tag Manager.
