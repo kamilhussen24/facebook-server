@@ -2,10 +2,10 @@
 require('dotenv').config();
 
 module.exports = async function handler(req, res) {
-  const ALLOWED_ORIGINS = ['https://fb-kamil.surge.s']; // ক্লায়েন্টের ডোমেইন যোগ করুন
+  const ALLOWED_ORIGINS = ['https://fb-kamil.surge.sh']; // Add client domain
   const origin = req.headers.origin;
 
-  // CORS প্রি-ফ্লাইট হ্যান্ডলিং
+  // CORS pre-flight handling
   if (req.method === 'OPTIONS') {
     if (ALLOWED_ORIGINS.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  // ইনপুট ডিস্ট্রাকচারিং
+  // Input destructuring
   const {
     event_name,
     event_source_url,
@@ -46,13 +46,13 @@ module.exports = async function handler(req, res) {
     custom_data = {}
   } = req.body;
 
-  // প্রয়োজনীয় ফিল্ড ভ্যালিডেশন
+  // Required field validation
   if (!event_name || !event_source_url || !event_id || !event_time) {
     console.error('Missing required fields:', { event_name, event_source_url, event_id, event_time });
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  // user_data ভ্যালিডেশন ফাংশন
+  // user_data validation function
   const validateUserData = (user_data) => {
     if (!user_data || typeof user_data !== 'object') {
       console.warn('Invalid user_data: not an object', user_data);
@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
 
     const { fbp = '', fbc = '' } = user_data;
 
-    // fbp এবং fbc ফর altogether
+    // fbp and fbc for altogether
     const fbpRegex = /^fb\.\d+\.\d+\.\d+\.\d+$/;
     const fbcRegex = /^fb\.\d+\.click\..+$/;
     const validatedFbp = typeof fbp === 'string' && fbpRegex.test(fbp) ? fbp : '';
@@ -72,7 +72,7 @@ module.exports = async function handler(req, res) {
 
   const { fbp, fbc } = validateUserData(user_data);
 
-  // custom_data ভ্যালিডেশন
+  // custom_data validation
   const validateCustomData = (custom_data) => {
     if (!custom_data || typeof custom_data !== 'object') {
       return {};
@@ -86,7 +86,7 @@ module.exports = async function handler(req, res) {
     return validCustomData;
   };
 
-  // ইভেন্ট টাইম ভ্যালিডেশন
+  // Event Time Validation
   const validatedEventTime = Number.isInteger(Number(event_time)) ? Number(event_time) : Math.floor(Date.now() / 1000);
 
   const clientIp =
@@ -138,7 +138,7 @@ module.exports = async function handler(req, res) {
   }
 };
 
-// ইউনিক ইভেন্ট আইডি জেনারেট করা (সার্ভারে ব্যাকআপ)
+// Generating unique event ID (backup on server)
 function generateEventId(name) {
   return `${name}-${crypto.randomUUID()}`;
 }
