@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 module.exports = async function handler(req, res) {
-  const ALLOWED_ORIGINS = ['https://your-frontend-domain.com']; // Add client domain
+  const ALLOWED_ORIGINS = ['https://fb-kamil.surge.sh']; // Add client domain
   const origin = req.headers.origin;
 
   if (req.method === 'OPTIONS') {
