@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 module.exports = async function handler(req, res) {
-  const ALLOWED_ORIGINS = ['https://fb-kamil.surge.sh']; // ক্লায়েন্টের ডোমেইন যোগ করুন
+  const ALLOWED_ORIGINS = ['https://fb-kamil.surge.s']; // ক্লায়েন্টের ডোমেইন যোগ করুন
   const origin = req.headers.origin;
 
   // CORS প্রি-ফ্লাইট হ্যান্ডলিং
