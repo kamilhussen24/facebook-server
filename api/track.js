@@ -10,7 +10,7 @@ module.exports = async function handler(req, res) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const pixel_id = '1211731600730925';
+  const pixel_id = 'YOUR PIXEL ID HARE';
   const access_token = process.env.FB_ACCESS_TOKEN;
 
   const {
