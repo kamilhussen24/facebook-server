@@ -33,7 +33,9 @@
 <body>
 
   <h1>Facebook Pixel Event Tester</h1>
-
+  
+<!-- You can use the buttons as you like.-->
+	
   <button onclick="handleClick('Done', 'https://example.com/your-target-page')">Done</button>
   <button onclick="sendEvent('Lead', null, null, generateEventId('Lead'))">Lead</button>
   <button onclick="sendEvent('AddToCart', 19.99, 'USD', generateEventId('AddToCart'))">Add to Cart</button>
@@ -42,7 +44,7 @@
   <button onclick="sendEvent('ViewContent', null, null, generateEventId('ViewContent'))">View Content</button>
   <button onclick="sendEvent('CompleteRegistration', null, null, generateEventId('CompleteRegistration'))">Complete Registration</button>
   <button onclick="sendEvent('Join', null, null, generateEventId('Join'))">Join</button>
-  <button onclick="sendEvent('Call', null, null, generateEventId('Call'))">Call</button>
+  <button onclick="sendEvent('Buy', null, null, generateEventId('Buy'))">Buy</button>
   <button onclick="sendEvent('Read', null, null, generateEventId('Read'))">Read</button>
 
   <script>
@@ -114,7 +116,7 @@
       }
     };
 
-    fetch('https://facebook-server-kamil.vercel.app/api/track', {
+    fetch('https://your-api-url/api/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -132,13 +134,13 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
 
-    fbq('init', '1211731600730925');
+    fbq('init', 'Your Pixel Id Hare');
     fbq('track', 'PageView');
   </script>
 
   <noscript>
     <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=1211731600730925&ev=PageView&noscript=1"/>
+         src="https://www.facebook.com/tr?id=your-pixel-id-hare&ev=PageView&noscript=1"/>
   </noscript>
 </body>
 </html>
